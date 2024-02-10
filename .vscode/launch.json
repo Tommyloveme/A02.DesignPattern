@@ -1,0 +1,45 @@
+{
+    "version": "0.2",
+    "configurations": [
+        {
+            "name": "TestSolution_gdb",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/bin/test.exe", // 替换为你的可执行文件路径
+            "args": [" --gtest_filter=TestRemoveElement.Case_01"], // 传递给可执行文件的参数
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "build" // 如果有需要，在运行调试之前执行的任务名称
+        },
+        {
+            "name": "TestSolution",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/bin/test.exe", // 替换为你的可执行文件路径
+            "args": [], // 传递给可执行文件的参数
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "build" // 如果有需要，在运行调试之前执行的任务名称
+        }
+    ]
+}

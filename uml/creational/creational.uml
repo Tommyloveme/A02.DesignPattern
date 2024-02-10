@@ -1,0 +1,31 @@
+@startuml
+interface MapSite {
+    {abstract} +Enter()
+}
+
+class Room {
+    +Enter()
+    +SetSide()
+    +GetSide()
+}
+
+class Wall {
+    +Enter()
+}
+
+class Door {
+    +Enter()
+    +IsOpen()
+}
+
+class Maze {
+    +AddRoom()
+    +RoomNo()
+}
+
+MapSite <|.. Room
+MapSite <|.. Wall
+MapSite <|.. Door
+Maze o-- Room
+
+@enduml

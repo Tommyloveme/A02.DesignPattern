@@ -1,0 +1,25 @@
+@startuml
+abstract        abstract
+abstract class  "abstract class"
+annotation      annotation
+circle          circle
+class           class
+class           class_stereo  <<stereotype>>
+diamond         diamond
+entity          entity
+enum            enum
+exception       exception
+interface       interface
+protocol        protocol
+struct          struct
+@enduml
+
+
+@startuml
+abstract MapSite
+class C2
+class C3
+C1 -- C2
+
+remove @unlinked
+@enduml
