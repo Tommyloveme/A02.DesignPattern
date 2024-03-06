@@ -1,16 +1,13 @@
 #include <iostream>
 #include "spdlog/spdlog.h"
 #include "Creational.h"
-
-/*
-    // 使用默认日志器
-    auto console_logger = spdlog::default_logger_raw();
-    spdlog::info("Welcome to spdlog!");
-*/
+#include "TestBoost.h"
 
 using namespace DP;
+using namespace testBoost;
 
-int main() {
+void TestCreational()
+{
     MazeGame* mazeGame = new MazeGame();
     Maze* maze = mazeGame->CreateMaze();
 
@@ -23,6 +20,14 @@ int main() {
         Room* room = maze->RoomNo(num);
         room->Enter();
     }
+}
 
+int main()
+{
+    // 使用默认日志器
+    auto console_logger = spdlog::default_logger_raw();
+    spdlog::info("Welcome to spdlog!");
+
+    ContainerTest();
     return 0;
 }
