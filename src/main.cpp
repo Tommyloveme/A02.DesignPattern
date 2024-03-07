@@ -1,9 +1,12 @@
 #include <iostream>
 #include "spdlog/spdlog.h"
 #include "Creational.h"
-#include "TestBoost.h"
+// #include "TestBoost.h"
+#include "EnumDefine.h"
+#include "EnumDefine2.h"
 
 using namespace DP;
+using namespace std;
 using namespace testBoost;
 
 void TestCreational()
@@ -22,12 +25,18 @@ void TestCreational()
     }
 }
 
+void TestVoid()
+{
+    cout << ToString(Enum1::Value1) << endl;
+    cout << ToString(Enum2::Value1) << endl;
+}
+
 int main()
 {
     // 使用默认日志器
     auto console_logger = spdlog::default_logger_raw();
     spdlog::info("Welcome to spdlog!");
 
-    ContainerTest();
+    TestVoid();
     return 0;
 }

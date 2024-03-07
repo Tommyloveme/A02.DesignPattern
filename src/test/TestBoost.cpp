@@ -8,7 +8,7 @@ using namespace std;
 namespace testBoost {
 
 // 示例枚举类型
-enum class MyEnum {
+enum class Enum2 {
     Value1,
     Value2,
     Value3
@@ -16,7 +16,7 @@ enum class MyEnum {
 
 void SimplyTest()
 {
-    MyEnum e = MyEnum::Value2;
+    Enum2 e = Enum2::Value2;
 
     int intVar = 123;
     short shortVar = 456;
