@@ -1,70 +1,22 @@
+#include "TestBoost.h"
 #include <iostream>
-#include "gtest/gtest.h"
-#include <boost/lexical_cast.hpp>
 #include <string>
+#include "gtest/gtest.h"
+#include "boost/lexical_cast.hpp"
+#include "boost/describe.hpp"
+#include "boost/mp11.hpp"
 
 using namespace std;
+using namespace testBoost;
 
-// 枚举类型定义
-enum class Enum1 {
-    Value1,
+#define LOG_I(fmt, msg...) printf("[INFO] "#fmt, ##msg)
+
+enum class Value {
+    Value1 = 1,
     Value2,
     Value3
 };
-
-// ToString模板函数
-template<typename T>
-typename std::enable_if<std::is_enum<T>::value, std::string>::type
-ToString(const T& enumValue)
-{
-    return "";
-}
-
-template <typename T>
-typename std::enable_if<!std::is_enum<T>::value, std::string>::type
-ToString(T value)
-{
-    return boost::lexical_cast<std::string>(value);
-}
-
-inline std::string ToString(bool boolean)
-{
-    return boolean ? "true" : "false";
-}
-
-template <typename T>
-std::string ToString(std::vector<T> &vec)
-{
-    std::stringstream ss;
-    ss << "[";
-    if (!vec.empty())
-    {
-        // 输出第一个元素
-        ss << ToString(vec[0]);
-        // 输出剩余元素
-        for (size_t i = 1; i < vec.size(); ++i)
-        {
-            ss << ", " << ToString(vec[i]);
-        }
-    }
-    ss << "]";
-    return ss.str();
-}
-
-// 特例化模板函数为testBoost::Enum1类型
-template<>
-std::string ToString<Enum1>(const Enum1& enumValue) {
-    switch (enumValue) {
-        case Enum1::Value1:
-            return "Custom String for Value1";
-        case Enum1::Value2:
-            return "Custom String for Value2";
-        case Enum1::Value3:
-            return "Custom String for Value3";
-        default:
-            return "Unknown Enum Value";
-    }
-}
+BOOST_DESCRIBE_ENUM(Value, Value1, Value2, Value3)
 
 class TestBoost : public testing::Test
 {
@@ -75,7 +27,44 @@ class TestBoost : public testing::Test
     {}
 };
 
-TEST_F(TestBoost, test)
+TEST_F(TestBoost, ToString_for_basic_type)
 {
-    cout << ToString(Enum1::Value1) << endl;
+    Value e = Value::Value2;
+    int intVar = 123;
+    short shortVar = 456;
+    long longVar = 789;
+    long long longLongVar = 1234567890;
+    char charVar = 'A';
+    unsigned int unsignedIntVar = 234;
+    float floatVar = 3.14f;
+    double doubleVar = 2.71828;
+    long double longDoubleVar = 1.618033988749895;
+    bool boolVar = true;
+
+    EXPECT_EQ(ToString(e), "Value2(2)");
+    EXPECT_EQ(ToString(intVar), "123");
+    EXPECT_EQ(ToString(shortVar), "456");
+    EXPECT_EQ(ToString(longVar), "789");
+    EXPECT_EQ(ToString(longLongVar), "1234567890");
+    EXPECT_EQ(ToString(charVar), "A");
+    EXPECT_EQ(ToString(unsignedIntVar), "234");
+    EXPECT_EQ(ToString(floatVar), "3.1400001");
+    EXPECT_EQ(ToString(doubleVar), "2.71828");
+    EXPECT_EQ(ToString(longDoubleVar), "1.6180339887498949");
+    EXPECT_EQ(ToString(boolVar), "true");
+}
+
+TEST_F(TestBoost, ToString_for_container_type)
+{
+    std::vector<std::string> stringVector = {"x", "y", "z"};
+    std::set<double> doubleSet = {1.1, 2.2, 3.3, 4.4, 5.5};
+    std::map<std::string, int> doubleMap {{"apple", 5.1}, {"banana", 3.2}, {"orange", 8.3}};
+    std::unordered_map<std::string, int> doubleUnorderedMap {{"apple", 5.1}, {"banana", 3.2}, {"orange", 8.3}};
+    std::unordered_map<std::string, std::vector<int>> nestedUnorderedMap {{"a", {1, 2}}, {"b", {3}}, {"c", {4, 5, 6}}};
+
+    EXPECT_EQ(ToString(stringVector), "[x, y, z]");
+    EXPECT_EQ(ToString(doubleSet), "[1.1000000000000001, 2.2000000000000002, 3.2999999999999998, 4.4000000000000004, 5.5]");
+    EXPECT_EQ(ToString(doubleMap), "{{apple: 5}, {banana: 3}, {orange: 8}}}");
+    EXPECT_EQ(ToString(doubleUnorderedMap), "{{orange: 8}, {banana: 3}, {apple: 5}}}");
+    EXPECT_EQ(ToString(nestedUnorderedMap), "{{c: [4, 5, 6]}, {b: [3]}, {a: [1, 2]}}}");
 }
