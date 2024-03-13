@@ -7,6 +7,7 @@
 #include <map>
 #include <unordered_map>
 #include <type_traits>
+#include "MockBoostDescribeEnum.hpp"
 #include "boost/lexical_cast.hpp"
 #include <boost/describe.hpp>
 #include <boost/mp11.hpp>
