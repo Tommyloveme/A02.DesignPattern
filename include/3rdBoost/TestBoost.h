@@ -31,9 +31,17 @@ inline typename std::enable_if<std::is_enum<E>::value, std::string>::type ToStri
 
 // 基本类型转换为字符串的模板函数
 template <typename T>
-inline typename std::enable_if<!std::is_enum<T>::value, std::string>::type ToString(T value)
+inline typename std::enable_if<!std::is_enum<T>::value && std::is_arithmetic<T>::value, std::string>::type ToString(T value)
 {
     return boost::lexical_cast<std::string>(value);
+}
+
+template <typename T>
+inline typename std::enable_if<!std::is_enum<T>::value && !std::is_arithmetic<T>::value, std::string>::type ToString(T value)
+{
+    std::stringstream ss;
+    ss << value;
+    return ss.str();
 }
 
 // boolean转换为字符串的模板函数

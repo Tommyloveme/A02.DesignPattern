@@ -224,3 +224,19 @@ TEST_F(TestBoost, ToString_for_container_type)
     EXPECT_EQ(ToString(doubleUnorderedMap), "{{orange: 8}, {banana: 3}, {apple: 5}}}");
     EXPECT_EQ(ToString(nestedUnorderedMap), "{{c: [4, 5, 6]}, {b: [3]}, {a: [1, 2]}}}");
 }
+
+struct Worker {
+    std::string name;
+    int age;
+
+    friend std::ostream& operator<<(std::ostream& os, const Worker& self)
+    {
+        os << "name = " << self.name << "; age = " << self.age << std::endl;
+        return os;
+    }
+};
+
+TEST_F(TestBoost, ToString_for_custom_structure)
+{
+    EXPECT_EQ(ToString(Worker {"Jack", 27}), "name = Jack; age = 27\n");
+}
