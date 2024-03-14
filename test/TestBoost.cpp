@@ -1,6 +1,8 @@
 #include "TestBoost.h"
+#include "TestJson.h"
 #include <iostream>
 #include <string>
+#include <set>
 #include "gtest/gtest.h"
 #include "boost/lexical_cast.hpp"
 #include "boost/describe.hpp"
@@ -8,6 +10,8 @@
 
 using namespace std;
 using namespace testBoost;
+using namespace testJson;
+using json = nlohmann::json;
 
 #define LOG_I(fmt, msg...) printf("[INFO] "#fmt, ##msg)
 
@@ -239,4 +243,45 @@ struct Worker {
 TEST_F(TestBoost, ToString_for_custom_structure)
 {
     EXPECT_EQ(ToString(Worker {"Jack", 27}), "name = Jack; age = 27\n");
+}
+
+// 定义一个示例的模型类
+class Person {
+public:
+    std::string name;
+    int age;
+
+    NLOHMANN_DEFINE_TYPE_INTRUSIVE(Person, name, age)
+    friend std::ostream& operator<<(std::ostream& os, const Person& self)
+    {
+        os << json(self).dump();
+        return os;
+    }
+};
+
+int TestJsonSet() {
+    // 创建一个 std::set 对象
+    std::set<int> mySet = {1, 2, 3, 4, 5};
+
+    // 将 std::set 对象转换为 JSON 数组
+    nlohmann::json jsonArray;
+    for (const auto& elem : mySet) {
+        jsonArray.push_back(elem);
+    }
+
+    // 打印生成的 JSON 字符串
+    std::cout << jsonArray.dump() << std::endl;
+
+    return 0;
+}
+
+TEST_F(TestBoost, ToString_for_json)
+{
+    // 创建一个 Person 对象
+    Person person;
+    person.name = "Alice";
+    person.age = 30;
+
+    TestJsonSet();
+    EXPECT_EQ(ToString(person), R"({"age":30,"name":"Alice"})");
 }

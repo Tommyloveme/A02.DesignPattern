@@ -2,6 +2,7 @@
 #include "spdlog/spdlog.h"
 #include "Creational.h"
 #include "TestBoost.h"
+#include "TestJson.h"
 
 using namespace DP;
 using namespace std;

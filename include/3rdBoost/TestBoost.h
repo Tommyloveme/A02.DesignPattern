@@ -9,12 +9,13 @@
 #include <type_traits>
 #include "MockBoostDescribeEnum.hpp"
 #include "boost/lexical_cast.hpp"
-#include <boost/describe.hpp>
-#include <boost/mp11.hpp>
+#include "boost/describe.hpp"
+#include "boost/mp11.hpp"
+#include "json.hpp"
 
 namespace testBoost
 {
-#define TOCHAR(T) ToString(T)
+#define TOCHAR(T, members...) ToString(T, ##members).c_str()
 
 // 枚举类型转换为字符串的模板函数
 template <typename E>
@@ -36,6 +37,7 @@ inline typename std::enable_if<!std::is_enum<T>::value && std::is_arithmetic<T>:
     return boost::lexical_cast<std::string>(value);
 }
 
+// 非枚举, 非数值类型采用流式化方式打印
 template <typename T>
 inline typename std::enable_if<!std::is_enum<T>::value && !std::is_arithmetic<T>::value, std::string>::type ToString(T value)
 {
