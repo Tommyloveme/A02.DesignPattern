@@ -232,17 +232,18 @@ TEST_F(TestBoost, ToString_for_container_type)
 struct Worker {
     std::string name;
     int age;
+    MyEnum e;
 
-    friend std::ostream& operator<<(std::ostream& os, const Worker& self)
+    friend std::ostream& operator<<(std::ostream& os, const Worker& self) // #TODO: 思考enum的流式化序列化方案
     {
-        os << "name = " << self.name << "; age = " << self.age << std::endl;
+        os << "name = " << self.name << "; age = " << self.age << "; e = " << ToString(self.e) << std::endl;
         return os;
     }
 };
 
 TEST_F(TestBoost, ToString_for_custom_structure)
 {
-    EXPECT_EQ(ToString(Worker {"Jack", 27}), "name = Jack; age = 27\n");
+    EXPECT_EQ(ToString(Worker {"Jack", 27, Item150}), "name = Jack; age = 27; e = Item150(150)\n");
 }
 
 // 定义一个示例的模型类
