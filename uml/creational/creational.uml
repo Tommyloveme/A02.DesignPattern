@@ -1,16 +1,26 @@
 @startuml
+
+' 枚举
+enum Direction {
+    North
+    South
+    East
+    West
+}
+
 interface MapSite {
-    {abstract} +Enter()
+    {abstract} +std::shared_ptr<MapSite> Enter() const
 }
 
 class Room {
-    +Enter()
-    +SetSide()
-    +GetSide()
+    +SetSide(Direction, MapSite)
+    +GetSide(Direction)
+    ..
+    -
 }
 
 class Wall {
-    +Enter()
+
 }
 
 class Door {
@@ -19,13 +29,26 @@ class Door {
 }
 
 class Maze {
-    +AddRoom()
+    +AddRoom(Room)
     +RoomNo()
+    ..
+    -m_roomNo
+}
+
+class MazeGame {
+    +CreateMaze(startPos, endPos)
+    +GetStartPos()
+    ..
+    -m_startPos
+    -m_endPos
 }
 
 MapSite <|.. Room
 MapSite <|.. Wall
 MapSite <|.. Door
-Maze o-- Room
+Maze "1" o-- "n..." Room : 包含
+MazeGame "1" o-- "n..." Maze : 包含
 
+'hide methods
+'hide members
 @enduml

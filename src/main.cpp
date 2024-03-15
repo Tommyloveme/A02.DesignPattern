@@ -4,7 +4,6 @@
 #include "TestBoost.h"
 #include "TestJson.h"
 
-using namespace DP;
 using namespace std;
 using namespace testBoost;
 

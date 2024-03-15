@@ -1,11 +1,12 @@
 set(LIBRARY_OUTPUT_PATH "${PROJECT_SOURCE_DIR}/lib")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
-add_library(DesignPattern
+add_library(Creational
     creational/Creational.cpp)
-target_include_directories(DesignPattern PUBLIC
+target_include_directories(Creational PUBLIC
     ${CMAKE_SOURCE_DIR}/include
     ${CMAKE_SOURCE_DIR}/include/creational
+    ${CMAKE_SOURCE_DIR}/include/common
     ${CMAKE_SOURCE_DIR}/opensource/spdlog/include)
 
 add_library(TestBoost
@@ -25,4 +26,4 @@ include_directories(${CMAKE_SOURCE_DIR}/include
                     ${CMAKE_SOURCE_DIR}/opensource/nlohmann)
 
 add_executable(main main.cpp)
-target_link_libraries(main DesignPattern TestBoost TestJson)
+target_link_libraries(main Creational TestBoost TestJson)
