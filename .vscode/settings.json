@@ -79,5 +79,6 @@
         "*.ipp": "cpp"
     },
     "cmake.configureOnOpen": true,
-    "search.followSymlinks": false
+    "search.followSymlinks": false,
+    "outline.showVariables": false
 }
