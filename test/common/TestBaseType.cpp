@@ -1,6 +1,7 @@
 #include "BaseType.h"
 #include "TestBoost.h"
 #include <iostream>
+#include <map>
 #include "gtest/gtest.h"
 
 using namespace testBoost;

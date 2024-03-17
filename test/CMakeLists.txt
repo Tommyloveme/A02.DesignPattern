@@ -4,7 +4,9 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 # 设置包含的头文件路径
 set(INCLUDE_DIRS "${CMAKE_SOURCE_DIR}/include")
 file(GLOB_RECURSE HEADERS "${INCLUDE_DIRS}/*.h" "${INCLUDE_DIRS}/*.hpp")
-include_directories(${HEADERS})
+include_directories(${HEADERS}
+                    ${CMAKE_SOURCE_DIR}/include)
+
 include_directories(${PROJECT_SOURCE_DIR}/opensource/gtest/include
                     ${CMAKE_SOURCE_DIR}/opensource/spdlog/include
                     ${CMAKE_SOURCE_DIR}/opensource/Boost
@@ -20,4 +22,4 @@ set(SOURCE_DIR "${CMAKE_SOURCE_DIR}/test")
 file(GLOB_RECURSE SOURCES "${SOURCE_DIR}/*.cpp")
 add_executable(test ${SOURCES})
 
-target_link_libraries(test gtest gtest_main Creational TestBoost TestJson)
+target_link_libraries(test gtest gtest_main TestBoost TestJson)

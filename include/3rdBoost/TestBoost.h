@@ -15,7 +15,7 @@
 
 namespace testBoost
 {
-#define TOCHAR(T, members...) ToString(T, ##members).c_str()
+#define TOCHAR(T) ToString(T).c_str()
 
 // 枚举类型转换为字符串的模板函数
 template <typename E>

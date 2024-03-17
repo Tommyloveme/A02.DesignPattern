@@ -9,36 +9,55 @@ enum Direction {
 }
 
 interface MapSite {
-    {abstract} +std::shared_ptr<MapSite> Enter() const
+    +{abstract} std::shared_ptr<MapSite> Enter()
 }
 
 class Room {
+    +std::shared_ptr<MapSite> Enter()
     +SetSide(Direction, MapSite)
     +GetSide(Direction)
     ..
-    -
+    -map<Direction, std::shared_ptr<MapSite>> m_sides
 }
 
 class Wall {
-
+    +std::shared_ptr<MapSite> Enter()
+    ..
+    -std::shared_ptr<MapSite> m_room
 }
 
+'note left of Wall::Enter()
+'返回当前Room
+'end note
+
 class Door {
-    +Enter()
+    +std::shared_ptr<MapSite> Enter()
     +IsOpen()
 }
 
+'note left of Door::Enter()
+'返回下一个Room
+'end note
+
 class Maze {
-    +AddRoom(Room)
-    +RoomNo()
+    +CreateMaze(length, width)
+    -AddRoom(roomNo, Room)
     ..
-    -m_roomNo
+    -m_curRoom
 }
 
 class MazeGame {
-    +CreateMaze(startPos, endPos)
+    +CreateMaze(length, width)
+    +GameStart()
     +GetStartPos()
+    +Enter(Direction)
+    -Initiation()
+    -GetCurPos()
+    -ShowMaze()
+    -IsGameEnd()
     ..
+    -m_maze
+    -m_curPos
     -m_startPos
     -m_endPos
 }
@@ -47,7 +66,7 @@ MapSite <|.. Room
 MapSite <|.. Wall
 MapSite <|.. Door
 Maze "1" o-- "n..." Room : 包含
-MazeGame "1" o-- "n..." Maze : 包含
+MazeGame --> Maze
 
 'hide methods
 'hide members
