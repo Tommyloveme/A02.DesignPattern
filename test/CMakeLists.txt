@@ -23,5 +23,7 @@ link_directories(
 set(SOURCE_DIR "${CMAKE_SOURCE_DIR}/test")
 file(GLOB_RECURSE SOURCES "${SOURCE_DIR}/*.cpp")
 add_executable(test ${SOURCES})
+message(STATUS "Value of HEADERS: ${HEADERS}")
+message(STATUS "Value of SOURCES: ${SOURCES}")
 
 target_link_libraries(test gtest gmock gtest_main TestBoost TestJson)

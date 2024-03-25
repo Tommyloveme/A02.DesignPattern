@@ -4,7 +4,8 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 add_library(TestBoost
     3rdBoost/TestBoost.cpp)
 target_include_directories(TestBoost PUBLIC
-    ${CMAKE_SOURCE_DIR}/include/3rdBoost)
+    ${CMAKE_SOURCE_DIR}/include/3rdBoost
+    ${CMAKE_SOURCE_DIR}/include/common)
 
 add_library(TestJson
     3rdJson/TestJson.cpp)
