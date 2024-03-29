@@ -5,6 +5,8 @@
 #include <cstdarg>
 #include <cmath>
 
+using namespace std;
+
 TEST(TestPrintf, basic)
 {
     int num = 123;
@@ -59,4 +61,42 @@ TEST(TestPrintf, snprintf)
     int sz = std::snprintf(nullptr, 0, fmt, std::sqrt(2));
     std::vector<char> buf(sz + 1); // 注意为空终止符 +1
     std::sprintf(buf.data(), fmt, std::sqrt(2)); // 确定可以放入
+}
+
+struct IdMsg {
+    int id = 0;
+};
+
+struct EhcDataIntf {
+public:
+    EhcDataIntf() = default;
+
+    const IdMsg& GetId() const
+    {
+        return m_idMsg;
+    }
+
+    // 模板化的 UpdateId 方法
+    template<typename Func>
+    static void UpdateId(const Func&& setter) noexcept
+    {
+        if constexpr(std::is_same_v<Func, IdMsg>) {
+            m_idMsg = setter;
+        } else {
+            setter(m_idMsg);
+        }
+    }
+
+protected:
+    static IdMsg m_idMsg;
+};
+
+IdMsg EhcDataIntf::m_idMsg = IdMsg{0};
+
+TEST(TestWorker, common)
+{
+    EhcDataIntf::UpdateId(IdMsg{2});
+    cout << EhcDataIntf().GetId().id << endl;
+    EhcDataIntf::UpdateId([](IdMsg& idMsg) {idMsg.id = 3;});
+    cout << EhcDataIntf().GetId().id << endl;
 }
