@@ -7,6 +7,23 @@
 
 using namespace std;
 
+#define TRACE() Trace trace = Trace(__func__);
+
+class Trace {
+public:
+    Trace(std::string funcName) : m_funcName(funcName)
+    {
+        std::cout << "--> " << funcName << "()" << endl;
+    }
+
+    ~Trace()
+    {
+        std::cout << "<-- " << m_funcName << "()" << endl;
+    }
+protected:
+    std::string m_funcName;
+};
+
 TEST(TestPrintf, basic)
 {
     int num = 123;
@@ -63,40 +80,101 @@ TEST(TestPrintf, snprintf)
     std::sprintf(buf.data(), fmt, std::sqrt(2)); // 确定可以放入
 }
 
-struct IdMsg {
-    int id = 0;
+class EhcData {
+public:
+    static EhcData& Instance()
+    {
+        TRACE()
+        static EhcData ehcData {};
+        return ehcData;
+    }
+
+    friend ostream& operator<<(ostream& os, const EhcData& self)
+    {
+        os << "{id:" << self.m_id << ", name:" << self.m_name << "}" << endl;
+        return os;
+    }
+
+public:
+    EhcData() = default;
+    EhcData(EhcData&) = delete;
+    EhcData operator=(EhcData&) = delete;
+    int m_id = 0;
+    string m_name{"undefined"};
+};
+
+struct Message {
+    int id {0};
+    string name {"undefined"};
+
+    friend ostream& operator<<(ostream& os, const Message& self)
+    {
+        os << "{id:" << self.id << ", name:" << self.name << "}" << endl;
+        return os;
+    }
 };
 
 struct EhcDataIntf {
 public:
-    EhcDataIntf() = default;
-
-    const IdMsg& GetId() const
+    EhcDataIntf()
     {
-        return m_idMsg;
+        TRACE()
     }
 
-    // 模板化的 UpdateId 方法
-    template<typename Func>
-    static void UpdateId(const Func&& setter) noexcept
+    ~EhcDataIntf()
     {
-        if constexpr(std::is_same_v<Func, IdMsg>) {
-            m_idMsg = setter;
-        } else {
-            setter(m_idMsg);
-        }
+        TRACE()
     }
+
+    static const Message& GetMessage() noexcept;
+    template<typename setterFunc>
+    static void UpdateMessage(const setterFunc& setter) noexcept;
 
 protected:
-    static IdMsg m_idMsg;
+    static void SetMessage(const Message& message) noexcept;
 };
 
-IdMsg EhcDataIntf::m_idMsg = IdMsg{0};
+const Message& EhcDataIntf::GetMessage() noexcept
+{
+    TRACE()
+    static Message message;
+    message.id = EhcData::Instance().m_id;
+    message.name = EhcData::Instance().m_name;
+    return message;
+}
+
+void EhcDataIntf::SetMessage(const Message& message) noexcept
+{
+    TRACE()
+    EhcData& data = EhcData::Instance();
+    data.m_id = message.id;
+    data.m_name = message.name;
+}
+
+template<typename setterFunc>
+void EhcDataIntf::UpdateMessage(const setterFunc& setter) noexcept
+{
+    TRACE()
+    if constexpr(std::is_same_v<Func, Message>) {
+        SetMessage(setter);
+    } else {
+        Message message = GetMessage();
+        setter(message);
+        SetMessage(message);
+    }
+}
 
 TEST(TestWorker, common)
 {
-    EhcDataIntf::UpdateId(IdMsg{2});
-    cout << EhcDataIntf().GetId().id << endl;
-    EhcDataIntf::UpdateId([](IdMsg& idMsg) {idMsg.id = 3;});
-    cout << EhcDataIntf().GetId().id << endl;
+    Message message = EhcDataIntf::GetMessage();
+    cout << EhcData::Instance();
+
+    Message message;
+    message.id = 2;
+    message.name = "dyl";
+    EhcDataIntf::UpdateMessage(message);
+    cout << EhcData::Instance();
+
+    EhcDataIntf::UpdateMessage([](Message& message) {TRACE() message.id = 3;});
+    cout << EhcData::Instance();
 }
