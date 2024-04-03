@@ -95,12 +95,13 @@ public:
         return os;
     }
 
-public:
+protected:
     EhcData() = default;
     EhcData(EhcData&) = delete;
     EhcData operator=(EhcData&) = delete;
     int m_id = 0;
     string m_name{"undefined"};
+    friend class EhcDataIntf;
 };
 
 struct Message {
@@ -155,7 +156,7 @@ template<typename setterFunc>
 void EhcDataIntf::UpdateMessage(const setterFunc& setter) noexcept
 {
     TRACE()
-    if constexpr(std::is_same_v<Func, Message>) {
+    if constexpr(std::is_same_v<setterFunc, Message>) {
         SetMessage(setter);
     } else {
         Message message = GetMessage();
@@ -166,8 +167,9 @@ void EhcDataIntf::UpdateMessage(const setterFunc& setter) noexcept
 
 TEST(TestWorker, common)
 {
-    Message message = EhcDataIntf::GetMessage();
-    cout << EhcData::Instance();
+    // Message message = EhcDataIntf::GetMessage();
+    // auto id = EhcDataIntf::GetMessage().name;
+    // cout << EhcData::Instance();
 
     Message message;
     message.id = 2;
@@ -175,6 +177,6 @@ TEST(TestWorker, common)
     EhcDataIntf::UpdateMessage(message);
     cout << EhcData::Instance();
 
-    EhcDataIntf::UpdateMessage([](Message& message) {TRACE() message.id = 3;});
+    EhcDataIntf::UpdateMessage([](Message &message) {message.id = 3; });
     cout << EhcData::Instance();
 }
