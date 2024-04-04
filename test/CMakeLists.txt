@@ -1,10 +1,24 @@
 # 指定可执行文件的生成位置
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
-# 设置包含的头文件路径
-set(INCLUDE_DIRS "${CMAKE_SOURCE_DIR}/include")
-file(GLOB_RECURSE HEADERS "${INCLUDE_DIRS}/*.h" "${INCLUDE_DIRS}/*.hpp")
-include_directories(${HEADERS}
+# 自定义函数用于递归获取目录
+function(get_directories result dir)
+    file(GLOB children RELATIVE ${dir} ${dir}/*)
+    set(dirlist "")
+    foreach(child ${children})
+        if(IS_DIRECTORY ${dir}/${child})
+            list(APPEND dirlist ${dir}/${child})
+            get_directories(subdir ${dir}/${child}) # 递归调用
+            list(APPEND dirlist ${subdir}) # 将子目录也添加到列表中
+        endif()
+    endforeach()
+    set(${result} ${dirlist} PARENT_SCOPE)
+endfunction()
+
+# 递归获取目录
+get_directories(INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/include)
+
+include_directories(${INCLUDE_DIRS}
                     ${CMAKE_SOURCE_DIR}/include)
 
 include_directories(${PROJECT_SOURCE_DIR}/opensource/gtest/include
@@ -23,7 +37,7 @@ link_directories(
 set(SOURCE_DIR "${CMAKE_SOURCE_DIR}/test")
 file(GLOB_RECURSE SOURCES "${SOURCE_DIR}/*.cpp")
 add_executable(test ${SOURCES})
-message(STATUS "Value of HEADERS: ${HEADERS}")
+message(STATUS "Value of INCLUDE_DIRS: ${INCLUDE_DIRS}")
 message(STATUS "Value of SOURCES: ${SOURCES}")
 
 target_link_libraries(test gtest gmock gtest_main TestBoost TestJson)
