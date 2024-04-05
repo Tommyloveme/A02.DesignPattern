@@ -46,3 +46,30 @@ TEST_F(TestTemplate, base)
         std::cout << std::endl;
     }
 }
+
+// maximum of two values of any type:
+template <typename T>
+T max(T a, T b)
+{
+    std::cout << "max<T>()\n";
+    return b < a ? a : b;
+}
+
+// maximum of three values of any type:
+template <typename T>
+T max(T a, T b, T c)
+{
+    return max(max(a, b), c);
+}
+
+// maximum of two int values:
+int max(int a, int b)
+{
+    std::cout << "max(int,int) \n";
+    return b < a ? a : b;
+}
+
+TEST_F(TestTemplate, TestMax)
+{
+    max(47, 11, 33); // max<T>()
+}
