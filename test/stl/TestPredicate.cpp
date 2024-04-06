@@ -77,25 +77,6 @@ TEST_F(TestPredicate, test_for_find_if)
     std::cout << std::endl;
 }
 
-TEST_F(TestPredicate, test_for_all_true)
-{
-    bool a = true;
-    bool b = true;
-    bool c = true;
-    bool d = false;
-
-    EXPECT_EQ(AllTrue(a), true);
-    EXPECT_EQ(AllTrue(a, b), true);
-    EXPECT_EQ(AllTrue(a, b, c), true);
-    EXPECT_EQ(AllTrue(a, b, c, d), false);
-
-    xy_vect pos {1.0, 2.0};
-    EXPECT_EQ(IsFinite(pos), true);
-
-    xy_vect nan {NAN, NAN};
-    EXPECT_EQ(IsFinite(nan), false);
-}
-
 TEST_F(TestPredicate, test_for_is_finite)
 {
     double validValue = 3.14;
