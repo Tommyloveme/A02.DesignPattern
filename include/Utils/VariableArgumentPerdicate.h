@@ -83,5 +83,33 @@ inline bool AllFalse(std::unordered_map<KeyType, ValueType> container)
     return all_of(container.begin(), container.end(), [](const auto& elem){return AllFalse(elem.second);});
 }
 
+template<typename T, typename... Args>
+inline typename std::enable_if<!std::is_floating_point<T>::value, bool>::type IsOneOf(T first, Args... args)
+{
+    return ((first == args) || ...);
+}
+
+template<typename T, typename... Args>
+inline typename std::enable_if<std::is_floating_point<T>::value, bool>::type IsOneOf(T first, Args... args)
+{
+    constexpr T epsilon = std::numeric_limits<T>::epsilon();
+    auto compare_with_tolerance = [&](T a, T b) {
+        return std::abs(a - b) < epsilon;
+    };
+    return ((compare_with_tolerance(first, args)) || ...);
+}
+
+template<typename Container, typename T>
+inline bool IsOneOf(const T& value, const Container& container)
+{
+    return std::find(container.begin(), container.end(), value) != container.end();
+}
+
+template<typename T>
+inline bool IsOneOf(const T& value, const std::set<T>& container)
+{
+    return container.find(value) != container.end();
+}
+
 } // namespace Utils
 #endif // VARIABLE_ARGUMENT_PREDICATE_H

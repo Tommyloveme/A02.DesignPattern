@@ -1,5 +1,6 @@
 #include "gtest/gtest.h"
 #include "VariableArgumentPerdicate.h"
+#include "Basetype.h"
 
 using namespace std;
 using namespace Utils;
@@ -11,7 +12,7 @@ class TestVariableArgumentPerdicate : public testing::Test
     void TearDown() {}
 };
 
-TEST_F(TestVariableArgumentPerdicate, test_for_all_true)
+TEST_F(TestVariableArgumentPerdicate, test_for_allTrue_allFalse)
 {
     bool a = true;
     bool b = true;
@@ -49,4 +50,16 @@ TEST_F(TestVariableArgumentPerdicate, test_for_all_true)
     EXPECT_EQ(AllTrue(umapBool), true);
     umapBool = {{1, c}, {2, d}};
     EXPECT_EQ(AllFalse(umapBool), true);
+}
+
+TEST_F(TestVariableArgumentPerdicate, test_for_isOneOf)
+{
+    EXPECT_EQ(IsOneOf(1, 1, 2, 3), true);
+    CHUCK_ID chuck = CHUCK_1;
+    EXPECT_EQ(IsOneOf(chuck, CHUCK_1, CHUCK_2), true);
+    EXPECT_EQ(IsOneOf(chuck, CHUCK_2, CHUCK_MAX), false);
+
+    EXPECT_EQ(IsOneOf(1, {1, 2, 3}), true);
+    EXPECT_EQ(IsOneOf(chuck, {CHUCK_1, CHUCK_2}), true);
+    EXPECT_EQ(IsOneOf(chuck, {CHUCK_2, CHUCK_MAX}), false);
 }

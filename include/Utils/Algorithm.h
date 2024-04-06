@@ -2,6 +2,7 @@
 #define ALGORITHM_H
 
 #include <iostream>
+#include <algorithm>
 
 namespace Utils {
 
