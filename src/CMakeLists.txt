@@ -13,10 +13,15 @@ target_include_directories(TestJson PUBLIC
     ${CMAKE_SOURCE_DIR}/opensource/nlohmann
     ${CMAKE_SOURCE_DIR}/include/3rdJson)
 
+add_library(Data
+    Data/Data.cpp)
+target_include_directories(Data PUBLIC
+    ${CMAKE_SOURCE_DIR}/include/Data)
+
 include_directories(${CMAKE_SOURCE_DIR}/include
                     ${CMAKE_SOURCE_DIR}/opensource/spdlog/include
                     ${CMAKE_SOURCE_DIR}/opensource/Boost
                     ${CMAKE_SOURCE_DIR}/opensource/nlohmann)
 
 add_executable(main main.cpp)
-target_link_libraries(main TestBoost TestJson)
+target_link_libraries(main TestBoost TestJson Data)

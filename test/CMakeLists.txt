@@ -40,4 +40,4 @@ add_executable(test ${SOURCES})
 message(STATUS "Value of INCLUDE_DIRS: ${INCLUDE_DIRS}")
 message(STATUS "Value of SOURCES: ${SOURCES}")
 
-target_link_libraries(test gtest gmock gtest_main TestBoost TestJson)
+target_link_libraries(test gtest gmock gtest_main TestBoost TestJson Data)
