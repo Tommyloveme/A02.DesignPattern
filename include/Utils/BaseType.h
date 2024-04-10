@@ -1,6 +1,11 @@
 #ifndef BASE_TYPE_HEADER
 #define BASE_TYPE_HEADER
 
+struct Pos {
+    int x;
+    int y;
+};
+
 struct xy_vect {
     double x;
     double y;

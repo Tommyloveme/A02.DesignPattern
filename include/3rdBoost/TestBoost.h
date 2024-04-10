@@ -6,6 +6,7 @@
 #include <set>
 #include <map>
 #include <unordered_map>
+#include <tuple>
 #include <type_traits>
 #include "MockBoostDescribeEnum.hpp"
 #include "boost/lexical_cast.hpp"
@@ -50,6 +51,29 @@ inline typename std::enable_if<!std::is_enum<T>::value && !std::is_arithmetic<T>
 inline std::string ToString(bool boolean)
 {
     return boolean ? "true" : "false";
+}
+
+template <size_t Index = 0, typename... Types>
+inline typename std::enable_if<Index == sizeof...(Types), void>::type
+ToStringHelper(const std::tuple<Types...> &t, std::ostringstream &oss) {}
+
+template <size_t Index = 0, typename... Types>
+inline typename std::enable_if<Index < sizeof...(Types), void>::type
+ToStringHelper(const std::tuple<Types...> &t, std::ostringstream &oss) {
+    if (Index != 0)
+        oss << ", ";
+    oss << ToString(std::get<Index>(t));
+    ToStringHelper<Index + 1, Types...>(t, oss);
+}
+
+// ToString 函数
+template <typename... Types>
+inline std::string ToString(const std::tuple<Types...> &t) {
+    std::ostringstream oss;
+    oss << "{";
+    ToStringHelper(t, oss);
+    oss << "}";
+    return oss.str();
 }
 
 // vector转换为字符串的模板函数

@@ -201,6 +201,8 @@ TEST_F(TestBoost, ToString_for_basic_type)
     bool boolVar = true;
 
     cout << ToString(e) << endl;
+    cout << ToString(NAN) << endl;
+    cout << ToString(nan("abc")) << endl;
     EXPECT_EQ(ToString(e), "Item150(150)");
     EXPECT_EQ(ToString(intVar), "123");
     EXPECT_EQ(ToString(shortVar), "456");
@@ -285,4 +287,10 @@ TEST_F(TestBoost, ToString_for_json)
 
     TestJsonSet();
     EXPECT_EQ(ToString(person), R"({"age":30,"name":"Alice"})");
+}
+
+TEST_F(TestBoost, ToString_for_tuple)
+{
+    tuple<bool, int, double, std::string> myTuple = make_tuple(true, 123, 3.14, "Hello, world!");
+    EXPECT_EQ(ToString(myTuple), "{true, 123, 3.1400000000000001, Hello, world!}");
 }

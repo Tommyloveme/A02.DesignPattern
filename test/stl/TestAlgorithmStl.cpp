@@ -1,5 +1,4 @@
 #include "gtest/gtest.h"
-#include "NumericalJudgement.h"
 #include <vector>
 #include <iostream>
 #include <vector>
@@ -8,7 +7,6 @@
 #include <algorithm>
 
 using namespace std;
-using namespace Utils;
 
 // 定义一个仿函数，用于检查元素是否满足特定条件
 template <typename T>
@@ -37,14 +35,14 @@ std::vector<typename Container::value_type> find_if_custom(const Container& cont
     return result;
 }
 
-class TestPredicate : public testing::Test
+class TestAlgorithmStl : public testing::Test
 {
     void SetUp() {}
 
     void TearDown() {}
 };
 
-TEST_F(TestPredicate, test_for_transform_common)
+TEST_F(TestAlgorithmStl, test_for_transform_common)
 {
     std::vector<int> container = {1, 2, 3, 4, 5};
     std::vector<int> destination = {};
@@ -54,7 +52,24 @@ TEST_F(TestPredicate, test_for_transform_common)
     EXPECT_EQ(container, target);
 }
 
-TEST_F(TestPredicate, test_for_find_if)
+TEST_F(TestAlgorithmStl, test_for_max_min_element)
+{
+    std::vector<int> v{3, 1, -14, 1, 5, 9};
+    std::vector<int>::iterator result;
+
+    result = std::max_element(v.begin(), v.end());
+    std::cout << "max element:"
+              << std::distance(v.begin(), result)
+              << " value: " << *result << '\n';
+
+    result = std::max_element(v.begin(), v.end(), [](int a, int b)
+                              { return std::abs(a) < std::abs(b); });
+    std::cout << "abs max element:"
+              << std::distance(v.begin(), result)
+              << " value: " << *result << '\n';
+}
+
+TEST_F(TestAlgorithmStl, test_for_find_if)
 {
     std::vector<int> vec = {1, 2, 3, 4, 5, 6, 7, 8, 9};
     std::list<double> lst = {3.14, 2.71, 1.618, 2.718, 3.142};
@@ -77,41 +92,32 @@ TEST_F(TestPredicate, test_for_find_if)
     std::cout << std::endl;
 }
 
-TEST_F(TestPredicate, test_for_is_finite)
+TEST_F(TestAlgorithmStl, test_for_for_each)
 {
-    double validValue = 3.14;
-    EXPECT_EQ(IsFinite(validValue), true);
-    double nan = NAN;
-    EXPECT_EQ(IsFinite(nan), false);
-    EXPECT_EQ(IsFinite(validValue, nan), false);
+    std::vector<int> v{3, -4, 2, -8, 15, 267};
 
-    xy_vect pos {1.0, 2.0};
-    EXPECT_EQ(IsFinite(pos), true);
+    auto print = [](const int &n)
+    { std::cout << n << ' '; };
 
-    xy_vect nan_pos {NAN, NAN};
-    EXPECT_EQ(IsFinite(nan_pos), false);
+    std::cout << "before: ";
+    std::for_each(v.cbegin(), v.cend(), print);
+    std::cout << '\n';
 
-    std::vector<double> vec = {1.0, 2.0, 3.0, 4.0, 5.0};
-    EXPECT_EQ(IsFinite(vec), true);
+    // 就地自增每个元素
+    std::for_each(v.begin(), v.end(), [](int &n)
+                  { n++; });
 
-    std::vector<double> vec_nan = {1.0, 2.0, NAN, 4.0, 5.0};
-    EXPECT_EQ(IsFinite(vec_nan), false);
+    std::cout << "after: ";
+    std::for_each(v.cbegin(), v.cend(), print);
+    std::cout << '\n';
 
-    std::list<double> lst = {1.0, 2.0, 3.0, 4.0, 5.0};
-    EXPECT_EQ(IsFinite(lst), true);
+    struct Sum
+    {
+        void operator()(int n) { sum += n; }
+        int sum{0};
+    };
 
-    std::list<double> lst_nan = {1.0, 2.0, NAN, 4.0, 5.0};
-    EXPECT_EQ(IsFinite(lst_nan), false);
-
-    std::map<int, double> mapper = {{1, 1.0}, {2, 2.0}, {3, 3.0}, {4, 4.0}, {5, 5.0}};
-    EXPECT_EQ(IsFinite(mapper), true);
-
-    std::map<int, double> mapper_nan = {{1, 1.0}, {2, 2.0}, {3, NAN}, {4, 4.0}, {5, 5.0}};
-    EXPECT_EQ(IsFinite(mapper_nan), false);
-
-    std::unordered_map<int, double> umapper = {{1, 1.0}, {2, 2.0}, {3, 3.0}, {4, 4.0}, {5, 5.0}};
-    EXPECT_EQ(IsFinite(umapper), true);
-
-    std::unordered_map<int, double> umapper_nan = {{1, 1.0}, {2, 2.0}, {3, NAN}, {4, 4.0}, {5, 5.0}};
-    EXPECT_EQ(IsFinite(umapper_nan), false);
+    // 对每个元素调用 Sum::operator()
+    Sum s = std::for_each(v.begin(), v.end(), Sum());
+    std::cout << "总和：" << s.sum << '\n';
 }

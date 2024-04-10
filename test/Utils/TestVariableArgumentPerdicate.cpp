@@ -1,4 +1,6 @@
+#include <cmath>
 #include "gtest/gtest.h"
+#include "NumericalJudgement.h"
 #include "VariableArgumentPerdicate.h"
 #include "Basetype.h"
 
@@ -62,4 +64,43 @@ TEST_F(TestVariableArgumentPerdicate, test_for_isOneOf)
     EXPECT_EQ(IsOneOf(1, {1, 2, 3}), true);
     EXPECT_EQ(IsOneOf(chuck, {CHUCK_1, CHUCK_2}), true);
     EXPECT_EQ(IsOneOf(chuck, {CHUCK_2, CHUCK_MAX}), false);
+}
+
+TEST_F(TestVariableArgumentPerdicate, test_for_is_finite)
+{
+    double validValue = 3.14;
+    EXPECT_EQ(IsFinite(validValue), true);
+    double nan = NAN;
+    EXPECT_EQ(IsFinite(nan), false);
+    EXPECT_EQ(IsFinite(validValue, nan), false);
+
+    xy_vect pos {1.0, 2.0};
+    EXPECT_EQ(IsFinite(pos), true);
+
+    xy_vect nan_pos {NAN, NAN};
+    EXPECT_EQ(IsFinite(nan_pos), false);
+
+    std::vector<double> vec = {1.0, 2.0, 3.0, 4.0, 5.0};
+    EXPECT_EQ(IsFinite(vec), true);
+
+    std::vector<double> vec_nan = {1.0, 2.0, NAN, 4.0, 5.0};
+    EXPECT_EQ(IsFinite(vec_nan), false);
+
+    std::list<double> lst = {1.0, 2.0, 3.0, 4.0, 5.0};
+    EXPECT_EQ(IsFinite(lst), true);
+
+    std::list<double> lst_nan = {1.0, 2.0, NAN, 4.0, 5.0};
+    EXPECT_EQ(IsFinite(lst_nan), false);
+
+    std::map<int, double> mapper = {{1, 1.0}, {2, 2.0}, {3, 3.0}, {4, 4.0}, {5, 5.0}};
+    EXPECT_EQ(IsFinite(mapper), true);
+
+    std::map<int, double> mapper_nan = {{1, 1.0}, {2, 2.0}, {3, NAN}, {4, 4.0}, {5, 5.0}};
+    EXPECT_EQ(IsFinite(mapper_nan), false);
+
+    std::unordered_map<int, double> umapper = {{1, 1.0}, {2, 2.0}, {3, 3.0}, {4, 4.0}, {5, 5.0}};
+    EXPECT_EQ(IsFinite(umapper), true);
+
+    std::unordered_map<int, double> umapper_nan = {{1, 1.0}, {2, 2.0}, {3, NAN}, {4, 4.0}, {5, 5.0}};
+    EXPECT_EQ(IsFinite(umapper_nan), false);
 }
