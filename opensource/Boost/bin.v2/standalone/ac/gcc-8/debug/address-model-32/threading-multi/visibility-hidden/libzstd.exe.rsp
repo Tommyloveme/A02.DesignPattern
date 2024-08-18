@@ -1,0 +1,1 @@
+-Wl,--start-group "bin.v2/standalone/ac/gcc-8/debug/address-model-32/threading-multi/visibility-hidden/main-libzstd.o"  -Wl,-Bstatic  -Wl,-Bdynamic -llibzstd -Wl,--end-group
