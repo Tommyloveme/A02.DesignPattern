@@ -21,11 +21,14 @@ get_directories(INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/include)
 include_directories(${INCLUDE_DIRS}
                     ${CMAKE_SOURCE_DIR}/include)
 
-include_directories(${PROJECT_SOURCE_DIR}/opensource/gtest/include
-                    ${PROJECT_SOURCE_DIR}/opensource/gmock/include
-                    ${CMAKE_SOURCE_DIR}/opensource/spdlog/include
-                    ${CMAKE_SOURCE_DIR}/opensource/Boost
-                    ${CMAKE_SOURCE_DIR}/opensource/nlohmann)
+include_directories(
+    ${PROJECT_SOURCE_DIR}/opensource/gtest/include
+    ${PROJECT_SOURCE_DIR}/opensource/gmock/include
+    ${CMAKE_SOURCE_DIR}/opensource/spdlog/include
+    ${CMAKE_SOURCE_DIR}/opensource/Boost
+    ${CMAKE_SOURCE_DIR}/opensource/nlohmann
+    
+    )
 
 # 指定静态链接库文件目录
 link_directories(
@@ -34,10 +37,15 @@ link_directories(
     ${PROJECT_SOURCE_DIR}/lib)
 
 # 设置源文件目录
-set(SOURCE_DIR "${CMAKE_SOURCE_DIR}/test")
-file(GLOB_RECURSE SOURCES "${SOURCE_DIR}/*.cpp")
-add_executable(test ${SOURCES})
-message(STATUS "Value of INCLUDE_DIRS: ${INCLUDE_DIRS}")
-message(STATUS "Value of SOURCES: ${SOURCES}")
+# set(SOURCE_DIR "${CMAKE_SOURCE_DIR}/test")
+# set(SOURCE_DIR "${CMAKE_SOURCE_DIR}/test/DesignPattern")
+# file(GLOB_RECURSE SOURCES "${SOURCE_DIR}/*.cpp")
+
+# 手动选择要编译的cpp文件
+set(test_files ${CMAKE_SOURCE_DIR}/test/DesignPattern/TestFactory.cpp)
+
+add_executable(test ${test_files})
+# message(STATUS "Value of INCLUDE_DIRS: ${INCLUDE_DIRS}")
+# message(STATUS "Value of SOURCES: ${SOURCES}")
 
 target_link_libraries(test gtest gmock gtest_main TestBoost TestJson Data)
