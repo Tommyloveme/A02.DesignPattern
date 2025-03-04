@@ -27,8 +27,7 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/opensource/spdlog/include
     ${CMAKE_SOURCE_DIR}/opensource/Boost
     ${CMAKE_SOURCE_DIR}/opensource/nlohmann
-    
-    )
+)
 
 # 指定静态链接库文件目录
 link_directories(
@@ -42,7 +41,7 @@ link_directories(
 # file(GLOB_RECURSE SOURCES "${SOURCE_DIR}/*.cpp")
 
 # 手动选择要编译的cpp文件
-set(test_files ${CMAKE_SOURCE_DIR}/test/DesignPattern/TestFactory.cpp)
+set(test_files ${CMAKE_SOURCE_DIR}/test/DesignPattern/TestObserver.cpp)
 
 add_executable(test ${test_files})
 # message(STATUS "Value of INCLUDE_DIRS: ${INCLUDE_DIRS}")

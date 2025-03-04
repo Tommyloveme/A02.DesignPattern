@@ -2,6 +2,7 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include <gtest/gtest.h>
 
 // 抽象基类 (Product)
 class Shape {
@@ -55,11 +56,11 @@ void drawShapes(const std::vector<std::unique_ptr<ShapeFactory>>& factories) {
     }
 }
 
-int main() {
+TEST(FactoryPatternTest, common)
+{
     std::vector<std::unique_ptr<ShapeFactory>> factories;
     factories.push_back(std::make_unique<CircleFactory>());
     factories.push_back(std::make_unique<RectangleFactory>());
 
     drawShapes(factories); // 动态调用绘制方法
-    return 0;
 }
