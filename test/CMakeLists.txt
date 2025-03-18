@@ -41,7 +41,7 @@ link_directories(
 # file(GLOB_RECURSE SOURCES "${SOURCE_DIR}/*.cpp")
 
 # 手动选择要编译的cpp文件
-set(test_files ${CMAKE_SOURCE_DIR}/test/DesignPattern/TestObserver.cpp)
+set(test_files ${CMAKE_SOURCE_DIR}/test/stl/TestPtr.cpp)
 
 add_executable(test ${test_files})
 # message(STATUS "Value of INCLUDE_DIRS: ${INCLUDE_DIRS}")
